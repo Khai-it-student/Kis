@@ -1,0 +1,11 @@
+c:\users\евгений\documents\visual studio 2010\Projects\InputBox\InputBox\bin\Debug\InputBox.dll
+c:\users\евгений\documents\visual studio 2010\Projects\InputBox\InputBox\bin\Debug\InputBox.pdb
+c:\users\евгений\documents\visual studio 2010\Projects\InputBox\InputBox\obj\Debug\ResolveAssemblyReference.cache
+c:\users\евгений\documents\visual studio 2010\Projects\InputBox\InputBox\obj\Debug\InputBox.dll
+c:\users\евгений\documents\visual studio 2010\Projects\InputBox\InputBox\obj\Debug\InputBox.pdb
+D:\Курсова БД\WindowsFormsApp1\InputBox\bin\Debug\InputBox.dll
+D:\Курсова БД\WindowsFormsApp1\InputBox\bin\Debug\InputBox.pdb
+D:\Курсова БД\WindowsFormsApp1\InputBox\obj\Debug\InputBox.csprojAssemblyReference.cache
+D:\Курсова БД\WindowsFormsApp1\InputBox\obj\Debug\InputBox.csproj.CoreCompileInputs.cache
+D:\Курсова БД\WindowsFormsApp1\InputBox\obj\Debug\InputBox.dll
+D:\Курсова БД\WindowsFormsApp1\InputBox\obj\Debug\InputBox.pdb
