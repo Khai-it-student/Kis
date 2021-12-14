@@ -19,7 +19,7 @@ namespace InputBox
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Size = new Size(300, 150);
             this.Text = "Input box";
-
+//коментарий
             /* Создаем текстовое поле. -> */
 
             textBox = new TextBox();
