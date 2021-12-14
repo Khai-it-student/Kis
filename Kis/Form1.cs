@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using SD = System.Data;
 using MySql.Data.MySqlClient;
+using Excel = Microsoft.Office.Interop.Excel;
 namespace Kis
 {
     public partial class Form1 : Form
@@ -12,6 +13,35 @@ namespace Kis
         public Form1()
         {
             InitializeComponent();
+
+            Excel.Application xlApp = new Excel.Application(); //Excel
+            Excel.Workbook xlWB; //рабочая книга              
+            Excel.Worksheet xlSht; //лист Excel   
+            xlWB = xlApp.Workbooks.Open(@"D:\KIC\Kis\Kis\штатное для КИС 2021.xlsx"); //название файла Excel                                             
+            xlSht = xlWB.Worksheets["штатний розклад"]; //название листа или 1-й лист в книге xlSht = xlWB.Worksheets[1];
+            int iLastRow = xlSht.Cells[xlSht.Rows.Count, "A"].End[Excel.XlDirection.xlUp].Row;  //последняя заполненная строка в столбце А            
+            var arrData = (object[,])xlSht.Range["A1:J" + iLastRow].Value; //берём данные с листа Excel
+            //xlApp.Visible = true; //отображаем Excel     
+            xlWB.Close(false); //закрываем книгу, изменения не сохраняем
+            xlApp.Quit(); //закрываем Excel
+
+            //настройка DataGridView
+            this.dgv.Rows.Clear();
+            int RowsCount = arrData.GetUpperBound(0);
+            int ColumnsCount = arrData.GetUpperBound(1);
+            dgv.RowCount = RowsCount; //кол-во строк в DGV
+            dgv.ColumnCount = ColumnsCount; //кол-во столбцов в DGV
+
+            //заполняем DataGridView данными из массива
+            int i, j;
+            for (i = 1; i <= RowsCount; i++)
+            {
+                for (j = 1; j <= ColumnsCount; j++)
+                {
+                    dgv.Rows[i - 1].Cells[j - 1].Value = arrData[i, j];
+                }
+            }
+            /*
             queryText = "info";
             selection();
             for (int i = 0; i < dgv.Rows.Count - 1; i++)
@@ -38,6 +68,7 @@ namespace Kis
                 }
             }
             dgv1.Hide();
+            */
         }
         public MySqlConnection mycon;
         public MySqlCommand mycom;

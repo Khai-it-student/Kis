@@ -38,3 +38,7 @@ D:\KIC\Kis\Kis\bin\Debug\System.Buffers.xml
 D:\KIC\Kis\Kis\bin\Debug\System.Memory.xml
 D:\KIC\Kis\Kis\bin\Debug\System.Numerics.Vectors.xml
 D:\KIC\Kis\Kis\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+D:\KIC\Kis\Kis\obj\Debug\Interop.Microsoft.Office.Core.dll
+D:\KIC\Kis\Kis\obj\Debug\Interop.Microsoft.Office.Interop.Excel.dll
+D:\KIC\Kis\Kis\obj\Debug\Interop.VBIDE.dll
+D:\KIC\Kis\Kis\obj\Debug\Kis.csproj.ResolveComReference.cache
