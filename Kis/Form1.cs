@@ -306,22 +306,22 @@ namespace Kis
                     if (l[i] == "int")
                     {
                         //MessageBox.Show("Введіть ціле число");
-                        script += selectedColumn + " = " + inputBox.getString() + " ";
+                        script += "`"+selectedColumn + "` = " + inputBox.getString() + " ";
                     }
                     if (l[i] == "char")
                     {
                         MessageBox.Show("Введіть рядок символів");
-                        script += selectedColumn + " = " + "'" + inputBox.getString() + "' ";
+                        script += "`"+selectedColumn + "` = " + "'" + inputBox.getString() + "' ";
                     }
                     if (l[i] == "varchar")
                     {
                         MessageBox.Show("Введіть рядок символів");
-                        script += selectedColumn + " = " + "'" + inputBox.getString() + "' ";
+                        script += "`"+selectedColumn + "` = " + "'" + inputBox.getString() + "' ";
                     }
                     if (l[i] == "date")
                     {
                         MessageBox.Show("Введіть дату у форматі рррр-мм-дд");
-                        script += selectedColumn + " = " + "'" + inputBox.getString() + "' ";
+                        script += "`"+selectedColumn + "` = " + "'" + inputBox.getString() + "' ";
                     }
                 }
                 string scr = "SELECT C.COLUMN_NAME FROM information_schema.table_constraints AS pk INNER JOIN information_schema.KEY_COLUMN_USAGE AS C ON C.TABLE_NAME = pk.TABLE_NAME AND C.CONSTRAINT_NAME = pk.CONSTRAINT_NAME AND C.TABLE_SCHEMA = pk.TABLE_SCHEMA WHERE pk.TABLE_NAME = '" + selectedTable + "' AND pk.CONSTRAINT_TYPE = 'PRIMARY KEY'; ";
@@ -343,7 +343,7 @@ namespace Kis
                         break;
                     }
                 script += "where " + l[0] + " = \"" + dgv[ind, selectedRow].Value.ToString() + "\";";
-               // MessageBox.Show(script);
+               MessageBox.Show(script);
                 ms_data = new MySqlDataAdapter(script, connect);
                 table = new SD.DataTable();                
                 ms_data.Fill(table);
@@ -477,25 +477,37 @@ namespace Kis
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Hashtable idPosition = new Hashtable();
+            int[] plan = new int[5];
+            int[] fact = new int[5];
             selectedTable = "teachers";
             selection();
             for (int i = 0; i < dgv.Rows.Count - 1; i++)
             {
-                if ((dgv[0, i].Value != null && dgv[0, i].Value.ToString() != "") || (dgv[1, i].Value != null && dgv[1, i].Value.ToString() != ""))
+                if (dgv[0, i].Value != null && dgv[0, i].Value.ToString() != "" && dgv[0, i].Value != null && dgv[0, i].Value.ToString() != "")
                 {
-                    idPosition.Add(dgv[i, 0].Value.ToString(), dgv[i, 1].Value.ToString());
-                    dgvV.DataSource = idPosition;
+                    switch (dgv[0, i].Value.ToString())
+                    {
+                        case "1": plan[0] += Convert.ToInt32(dgv[3, i].Value); fact[0] += Convert.ToInt32(dgv[4, i].Value); break;
+                        case "2": plan[1] += Convert.ToInt32(dgv[3, i].Value); fact[1] += Convert.ToInt32(dgv[4, i].Value); break;
+                        case "3": plan[2] += Convert.ToInt32(dgv[3, i].Value); fact[2] += Convert.ToInt32(dgv[4, i].Value); break;
+                        case "4": plan[3] += Convert.ToInt32(dgv[3, i].Value); fact[3] += Convert.ToInt32(dgv[4, i].Value); break;
+                        case "5": plan[4] += Convert.ToInt32(dgv[3, i].Value); fact[4] += Convert.ToInt32(dgv[4, i].Value); break;
+                    }
                 }
             }
-            
+            for (int i = 0; i < 5; i++)
+            {
+                MessageBox.Show(plan[i].ToString());
+                MessageBox.Show(fact[i].ToString());
+            }
+
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             //Dictionary<string, string> idPosition = new Dictionary<string, string>();
-            int[] plan = new int[6];
-            int[] fact = new int[6];
+            int[] plan = new int[5];
+            int[] fact = new int[5];
             selectedTable = "teachers";
             selection();
             for (int i = 0; i < dgv.Rows.Count - 1; i++)
@@ -508,11 +520,10 @@ namespace Kis
                         case "3": plan[2] += Convert.ToInt32(dgv[3, i].Value); fact[2] += Convert.ToInt32(dgv[4, i].Value); break;
                         case "4": plan[3] += Convert.ToInt32(dgv[3, i].Value); fact[3] += Convert.ToInt32(dgv[4, i].Value); break;
                         case "5": plan[4] += Convert.ToInt32(dgv[3, i].Value); fact[4] += Convert.ToInt32(dgv[4, i].Value); break;
-                        case "6": plan[5] += Convert.ToInt32(dgv[3, i].Value); fact[5] += Convert.ToInt32(dgv[4, i].Value); break;
                     }
                 }                
             }
-            for (int i = 0; i<6; i++)
+            for (int i = 0; i<5; i++)
             {
                 MessageBox.Show(plan[i].ToString());
                 MessageBox.Show(fact[i].ToString());
