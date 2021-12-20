@@ -8,13 +8,77 @@ using MySql.Data.MySqlClient;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Collections;
 using System.Linq;
+using System.IO;
+using Word = Microsoft.Office.Interop.Word;
 
 namespace Kis
 {
     public partial class Form1 : Form
     {
+        private FileInfo _fileInfo;
+        bool Process(Dictionary<string, string> items)
+        {
+            Word.Application application = null;
+            try
+            {
+                var app = new Word.Application();
+                Object file = _fileInfo.FullName;
+                Object missing = Type.Missing;
+
+                app.Documents.Open(file);
+
+                foreach (var item in items)
+                {
+                    Word.Find find = app.Selection.Find;
+                    find.Text = item.Key;
+                    find.Replacement.Text = item.Value;
+
+                    object wrap = Word.WdFindWrap.wdFindContinue;
+                    object replace = Word.WdReplace.wdReplaceAll;
+
+                    find.Execute(FindText: Type.Missing,
+                        MatchCase: false,
+                        MatchWholeWord: false,
+                        MatchWildcards: false,
+                        MatchSoundsLike: missing,
+                        MatchAllWordForms: false,
+                        Forward: true,
+                        Wrap: wrap,
+                        Format: false,
+                        ReplaceWith: missing, Replace: replace);
+
+
+                }
+                Object newFileName = Path.Combine(_fileInfo.DirectoryName, DateTime.Now.ToString("yyyyMMdd HHmmss") + _fileInfo.Name);
+                app.ActiveDocument.SaveAs(newFileName);
+                app.ActiveDocument.Close();
+
+                return true;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            finally
+            {
+                if (application != null)
+                {
+                    application.Quit();
+                }
+
+            }
+            return false;
+        }
+
         public Form1()
         {
+            string fileName = "blanc.docx";
+            if (File.Exists(fileName))
+            {
+                _fileInfo = new FileInfo(fileName);
+            }
+
+            else
+            {
+                throw new ArgumentException("File not found");
+            }
             InitializeComponent();
 
             Excel.Application xlApp = new Excel.Application(); //Excel
@@ -86,13 +150,11 @@ namespace Kis
             {
                 if (dgv[0, i].Value != null && dgv[0, i].Value.ToString() != "")
                 {
-                    kafedra.Items.Add(dgv[0, i].Value.ToString());
                     kafedra1.Items.Add(dgv[0, i].Value.ToString());
                 }
                 if (dgv[1, i].Value != null && dgv[1, i].Value.ToString() != "")
                 {
                     year1.Items.Add(dgv[1, i].Value.ToString());
-                    year.Items.Add(dgv[1, i].Value.ToString());
                 }
             }
             dgv1.Hide();
@@ -166,21 +228,17 @@ namespace Kis
                     mycon.Close();
                     if (selectedTable == "info")
                     {
-                        year.Items.Clear();
                         year1.Items.Clear();
-                        kafedra.Items.Clear();
                         kafedra1.Items.Clear();
                         for (int i = 0; i < dgv.Rows.Count - 1; i++)
                         {
                             if (dgv[0, i].Value != null && dgv[0, i].Value.ToString() != "")
                             {
-                                kafedra.Items.Add(dgv[0, i].Value.ToString());
                                 kafedra1.Items.Add(dgv[0, i].Value.ToString());
                             }
                             if (dgv[1, i].Value != null && dgv[1, i].Value.ToString() != "")
                             {
                                 year1.Items.Add(dgv[1, i].Value.ToString());
-                                year.Items.Add(dgv[1, i].Value.ToString());
                             }
                         }
                     }
@@ -272,13 +330,11 @@ namespace Kis
                 mycon.Close();                
                 if (dgv[0, dgv.Rows.Count - 1].Value != null && selectedTable == "info")
                 {
-                    kafedra.Items.Add(dgv[0, dgv.Rows.Count - 1].Value.ToString());
                     kafedra1.Items.Add(dgv[0, dgv.Rows.Count - 1].Value.ToString());
                 }
                 if (dgv[1, dgv.Rows.Count - 1].Value != null && selectedTable == "info")
                 {
                     year1.Items.Add(dgv[1, dgv.Rows.Count - 1].Value.ToString());
-                    year.Items.Add(dgv[1, dgv.Rows.Count - 1].Value.ToString());
                 }
 
             }
@@ -352,21 +408,17 @@ namespace Kis
                 mycon.Close();
                 if (selectedTable == "info")
                 {
-                    year.Items.Clear();
                     year1.Items.Clear();
-                    kafedra.Items.Clear();
                     kafedra1.Items.Clear();
                     for (int i = 0; i < dgv.Rows.Count - 1; i++)
                     {
                         if (dgv[0, i].Value != null && dgv[0, i].Value.ToString() != "")
                         {
-                            kafedra.Items.Add(dgv[0, i].Value.ToString());
                             kafedra1.Items.Add(dgv[0, i].Value.ToString());
                         }
                         if (dgv[1, i].Value != null && dgv[1, i].Value.ToString() != "")
                         {
                             year1.Items.Add(dgv[1, i].Value.ToString());
-                            year.Items.Add(dgv[1, i].Value.ToString());
                         }
                     }
                 }
@@ -376,33 +428,27 @@ namespace Kis
 
         private void button5_Click(object sender, EventArgs e)
         {
-            groupBox1.Show();
             groupBox2.Hide();
             groupBox4.Hide();
             button5.Enabled = false;
-            button6.Enabled = true;
             button7.Enabled = true;
             
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
-            groupBox1.Hide();
             groupBox2.Show();
             groupBox4.Hide();
-            button6.Enabled = false;
             button5.Enabled = true;
             button7.Enabled = true;
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
-            groupBox1.Hide();
             groupBox2.Hide();
             groupBox4.Show();
             button7.Enabled = false;
             button5.Enabled = true;
-            button6.Enabled = true;
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -495,11 +541,7 @@ namespace Kis
                     }
                 }
             }
-            for (int i = 0; i < 5; i++)
-            {
-                MessageBox.Show(plan[i].ToString());
-                MessageBox.Show(fact[i].ToString());
-            }
+            
 
         }
 
@@ -528,6 +570,74 @@ namespace Kis
                 MessageBox.Show(plan[i].ToString());
                 MessageBox.Show(fact[i].ToString());
             }
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+
+            int[] plan = new int[5];
+            int[] fact = new int[5];
+            selectedTable = "teachers";
+            selection();
+            for (int i = 0; i < dgv.Rows.Count - 1; i++)
+            {
+                if (dgv[0, i].Value != null && dgv[0, i].Value.ToString() != "" && dgv[0, i].Value != null && dgv[0, i].Value.ToString() != "")
+                {
+                    switch (dgv[0, i].Value.ToString())
+                    {
+                        case "1": plan[0] += Convert.ToInt32(dgv[3, i].Value); fact[0] += Convert.ToInt32(dgv[4, i].Value); break;
+                        case "2": plan[1] += Convert.ToInt32(dgv[3, i].Value); fact[1] += Convert.ToInt32(dgv[4, i].Value); break;
+                        case "3": plan[2] += Convert.ToInt32(dgv[3, i].Value); fact[2] += Convert.ToInt32(dgv[4, i].Value); break;
+                        case "4": plan[3] += Convert.ToInt32(dgv[3, i].Value); fact[3] += Convert.ToInt32(dgv[4, i].Value); break;
+                        case "5": plan[4] += Convert.ToInt32(dgv[3, i].Value); fact[4] += Convert.ToInt32(dgv[4, i].Value); break;
+                    }
+                }
+            }
+
+
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            selectedTable = "teachers";
+            selection();
+            string zav_kafedri = "";
+            string kaf_number = "";
+            for (int i = 0; i < dgv.Rows.Count - 1; i++)
+            {
+                if (Convert.ToInt32(dgv[0, i].Value) == 5)
+                {
+                    int id = 0;
+                    for (int pib = 0; pib < dgv[1, i].Value.ToString().Length; pib++)
+                    {
+
+                        if (id == 0)
+                        {
+                            zav_kafedri += dgv[1, i].Value.ToString()[pib];
+                        }
+                        if (dgv[1, i].Value.ToString()[pib].Equals(' ') && id == 0)
+                            id = 1;
+
+                        if (id == 1 && !dgv[1, i].Value.ToString()[pib].Equals(' '))
+                        {
+                            zav_kafedri += dgv[1, i].Value.ToString()[pib] + ".";
+                            id = 2;
+                        }
+
+                        if (id == 2 && dgv[1, i].Value.ToString()[pib].Equals(' '))
+                            id = 3;
+
+                        if (id == 3 && !dgv[1, i].Value.ToString()[pib].Equals(' '))
+                        {
+                            zav_kafedri += dgv[1, i].Value.ToString()[pib] + ".";
+                            break;
+                        }
+                    }
+                }
+            }
+            for (int kaf = 0; kaf < kafedra1.SelectedItem.ToString().Length; kaf++)
+                if (Char.IsDigit(kafedra1.SelectedItem.ToString()[kaf]))
+                    kaf_number += kafedra1.SelectedItem.ToString()[kaf];
         }
     }
 }
