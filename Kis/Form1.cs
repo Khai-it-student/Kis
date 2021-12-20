@@ -525,6 +525,8 @@ namespace Kis
         {
             int[] plan = new int[5];
             int[] fact = new int[5];
+            
+           
             selectedTable = "teachers";
             selection();
             for (int i = 0; i < dgv.Rows.Count - 1; i++)
@@ -541,35 +543,24 @@ namespace Kis
                     }
                 }
             }
-            
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //Dictionary<string, string> idPosition = new Dictionary<string, string>();
-            int[] plan = new int[5];
-            int[] fact = new int[5];
-            selectedTable = "teachers";
-            selection();
-            for (int i = 0; i < dgv.Rows.Count - 1; i++)
+            var items = new Dictionary<string, string>
             {
-                if (dgv[0, i].Value != null && dgv[0, i].Value.ToString() != "" && dgv[0, i].Value != null && dgv[0, i].Value.ToString() != "")
-                {                             
-                    switch (dgv[0, i].Value.ToString()) {
-                        case "1": plan[0] += Convert.ToInt32(dgv[3, i].Value); fact[0] += Convert.ToInt32(dgv[4, i].Value); break;
-                        case "2": plan[1] += Convert.ToInt32(dgv[3, i].Value); fact[1] += Convert.ToInt32(dgv[4, i].Value); break;
-                        case "3": plan[2] += Convert.ToInt32(dgv[3, i].Value); fact[2] += Convert.ToInt32(dgv[4, i].Value); break;
-                        case "4": plan[3] += Convert.ToInt32(dgv[3, i].Value); fact[3] += Convert.ToInt32(dgv[4, i].Value); break;
-                        case "5": plan[4] += Convert.ToInt32(dgv[3, i].Value); fact[4] += Convert.ToInt32(dgv[4, i].Value); break;
-                    }
-                }                
-            }
-            for (int i = 0; i<5; i++)
-            {
-                MessageBox.Show(plan[i].ToString());
-                MessageBox.Show(fact[i].ToString());
-            }
+                { "<autumn_P_kilk>",plan[2].ToString()},
+                { "<autumn_D_kilk>", plan[0].ToString() },
+                { "<autumn_ST_amount>",plan[1].ToString()  },
+                { "<autumn_A_amount>", plan[3].ToString() },
+                { "<AGeneral_amount>",plan.Sum().ToString()  },
+                { "<autumn_P_realization>",fact[2].ToString()  },
+                { "<autumn_D_realization>", fact[0].ToString() },
+                { "<autumn_ST_realization>",fact[1].ToString()  },
+                { "<autumn_A_realization>",fact[3].ToString()  },
+                { "<AGeneral_realization>",fact.Sum().ToString()  },
+                
+            };
+
+            Process(items);
+
+
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -577,7 +568,10 @@ namespace Kis
 
             int[] plan = new int[5];
             int[] fact = new int[5];
-            selectedTable = "teachers";
+
+            
+
+        selectedTable = "teachers";
             selection();
             for (int i = 0; i < dgv.Rows.Count - 1; i++)
             {
@@ -591,14 +585,34 @@ namespace Kis
                         case "4": plan[3] += Convert.ToInt32(dgv[3, i].Value); fact[3] += Convert.ToInt32(dgv[4, i].Value); break;
                         case "5": plan[4] += Convert.ToInt32(dgv[3, i].Value); fact[4] += Convert.ToInt32(dgv[4, i].Value); break;
                     }
+
                 }
             }
 
+            
+            var items = new Dictionary<string, string>
+           
+            {
+                { "<spring_P_kilk>", plan[2].ToString() },
+                { "<spring_D_kilk>", plan[0].ToString() },
+                { "<spring_ST_amount>", plan[1].ToString() },
+                { "<spring_A_amount>", plan[3].ToString() },
+                { "<SGeneral_amount>", plan.Sum().ToString() },
+                { "<spring_P_realization>", fact[2].ToString() },
+                { "<spring_D_realization>",  fact[0].ToString() },
+                { "<spring_ST_realization>", fact[1].ToString() },
+                { "<spring_A_realization>", fact[3].ToString() },
+                { "<SGeneral_realization>", fact.Sum().ToString() },
+            };
+            Process(items);
 
         }
 
         private void button2_Click_1(object sender, EventArgs e)
         {
+
+           
+
             selectedTable = "teachers";
             selection();
             string zav_kafedri = "";
@@ -639,5 +653,21 @@ namespace Kis
                 if (Char.IsDigit(kafedra1.SelectedItem.ToString()[kaf]))
                     kaf_number += kafedra1.SelectedItem.ToString()[kaf];
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+
+
+            var items = new Dictionary<string, string>
+
+            {
+                { "<kafedra>", kafedra1.SelectedItem.ToString() },
+                { "<date>", year1.SelectedItem.ToString() },
+            };
+            Process(items);
+
+        }
     }
-}
+    }
+
