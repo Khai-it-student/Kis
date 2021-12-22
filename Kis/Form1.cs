@@ -16,6 +16,7 @@ namespace Kis
     public partial class Form1 : Form
     {
         private FileInfo _fileInfo;
+        Dictionary<string, string> items = new Dictionary<string, string>();
         bool Process(Dictionary<string, string> items)
         {
             Word.Application application = null;
@@ -69,7 +70,7 @@ namespace Kis
 
         public Form1()
         {
-            string fileName = "blanc.docx";
+            string fileName = @"D:\KIC\Kis\Kis\blank.docx";
             if (File.Exists(fileName))
             {
                 _fileInfo = new FileInfo(fileName);
@@ -158,6 +159,7 @@ namespace Kis
                 }
             }
             dgv1.Hide();
+            groupBox2.Show();
             selectedColumn = dgv.Columns[0].Name;
         }
         public MySqlConnection mycon;
@@ -428,20 +430,13 @@ namespace Kis
 
         private void button5_Click(object sender, EventArgs e)
         {
-            groupBox2.Hide();
+            groupBox2.Show();
             groupBox4.Hide();
             button5.Enabled = false;
             button7.Enabled = true;
             
         }
 
-        private void button6_Click(object sender, EventArgs e)
-        {
-            groupBox2.Show();
-            groupBox4.Hide();
-            button5.Enabled = true;
-            button7.Enabled = true;
-        }
 
         private void button7_Click(object sender, EventArgs e)
         {
@@ -450,11 +445,6 @@ namespace Kis
             button7.Enabled = false;
             button5.Enabled = true;
         }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }  
 
 
         private void dgv_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -543,23 +533,17 @@ namespace Kis
                     }
                 }
             }
-            var items = new Dictionary<string, string>
-            {
-                { "<autumn_P_kilk>",plan[2].ToString()},
-                { "<autumn_D_kilk>", plan[0].ToString() },
-                { "<autumn_ST_amount>",plan[1].ToString()  },
-                { "<autumn_A_amount>", plan[3].ToString() },
-                { "<AGeneral_amount>",plan.Sum().ToString()  },
-                { "<autumn_P_realization>",fact[2].ToString()  },
-                { "<autumn_D_realization>", fact[0].ToString() },
-                { "<autumn_ST_realization>",fact[1].ToString()  },
-                { "<autumn_A_realization>",fact[3].ToString()  },
-                { "<AGeneral_realization>",fact.Sum().ToString()  },
-                
-            };
 
-            Process(items);
-
+            items.Add("<autumn_P_kilk>", plan[2].ToString());
+            items.Add("<autumn_D_kilk>", plan[0].ToString());
+            items.Add("<autumn_ST_amount>", plan[1].ToString());
+            items.Add("<autumn_A_amount>", plan[3].ToString());
+            items.Add("<AGeneral_amount>", plan.Sum().ToString());
+            items.Add("<autumn_P_realization>", fact[2].ToString());
+            items.Add("<autumn_D_realization>", fact[0].ToString());
+            items.Add("<autumn_ST_realization>", fact[1].ToString());
+            items.Add("<autumn_A_realization>", fact[3].ToString());
+            items.Add("<AGeneral_realization>", fact.Sum().ToString());
 
         }
 
@@ -589,29 +573,21 @@ namespace Kis
                 }
             }
 
-            
-            var items = new Dictionary<string, string>
-           
-            {
-                { "<spring_P_kilk>", plan[2].ToString() },
-                { "<spring_D_kilk>", plan[0].ToString() },
-                { "<spring_ST_amount>", plan[1].ToString() },
-                { "<spring_A_amount>", plan[3].ToString() },
-                { "<SGeneral_amount>", plan.Sum().ToString() },
-                { "<spring_P_realization>", fact[2].ToString() },
-                { "<spring_D_realization>",  fact[0].ToString() },
-                { "<spring_ST_realization>", fact[1].ToString() },
-                { "<spring_A_realization>", fact[3].ToString() },
-                { "<SGeneral_realization>", fact.Sum().ToString() },
-            };
-            Process(items);
+            items.Add("<spring_P_kilk>", plan[2].ToString());
+            items.Add("<spring_D_kilk>", plan[0].ToString());
+            items.Add("<spring_ST_amount>", plan[1].ToString());
+            items.Add("<spring_A_amount>", plan[3].ToString());
+            items.Add("<SGeneral_amount>", plan.Sum().ToString());
+            items.Add("<spring_P_realization>", fact[2].ToString());
+            items.Add("<spring_D_realization>", fact[0].ToString());
+            items.Add("<spring_ST_realization>", fact[1].ToString());
+            items.Add("<spring_A_realization>", fact[3].ToString());
+            items.Add("<SGeneral_realization>", fact.Sum().ToString());
 
         }
 
         private void button2_Click_1(object sender, EventArgs e)
-        {
-
-           
+        {           
 
             selectedTable = "teachers";
             selection();
@@ -652,20 +628,17 @@ namespace Kis
             for (int kaf = 0; kaf < kafedra1.SelectedItem.ToString().Length; kaf++)
                 if (Char.IsDigit(kafedra1.SelectedItem.ToString()[kaf]))
                     kaf_number += kafedra1.SelectedItem.ToString()[kaf];
+            
+            
+            items.Add("<kaf>", kaf_number);
+            items.Add("<pib>", zav_kafedri);
+            Process(items);
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-
-
-
-            var items = new Dictionary<string, string>
-
-            {
-                { "<kafedra>", kafedra1.SelectedItem.ToString() },
-                { "<date>", year1.SelectedItem.ToString() },
-            };
-            Process(items);
+            items.Add("<kafedra>", kafedra1.SelectedItem.ToString());
+            items.Add("<date>", year1.SelectedItem.ToString());            
 
         }
     }
